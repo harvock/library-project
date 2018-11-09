@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+const express = require('express');
+const bodyParser = require('body-parser');
+const hbs = require('hbs');
+const logger = require('morgan');
+const path = require('path');
+
+const app = express();
+
+// Middleware Setup
+app.use(logger('dev'));
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// Static routes.
+app.use(express.static(path.join(__dirname, 'public')));
+
+// View engine.
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
+
+// Main route.
+const index = require('./routes/index');
+app.use('/', index);
+
+module.exports = app;
+
+
+// catch 404 and render a not-found.hbs template
+// app.use((req, res, next) => {
+//   res.status(404);
+//   res.render('not-found');
+// });
+
+// app.use((err, req, res, next) => {
+//   // always log the error
+//   console.error('ERROR', req.method, req.path, err);
+
+//   // only render if the error ocurred before sending the response
+//   if (!res.headersSent) {
+//     res.status(500);
+//     res.render('error');
+//   }
+// });
